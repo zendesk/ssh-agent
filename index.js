@@ -3,9 +3,6 @@ const child_process = require('child_process');
 const fs = require('fs');
 
 try {
-
-    const home = process.env['HOME'];
-    const homeSsh = home + '/.ssh';
     const os = process.env['OS'];
     const privateKey = core.getInput('ssh-private-key').trim();
 
@@ -18,7 +15,13 @@ try {
     if (os == 'Windows_NT') {
         console.log('Preparing ssh-agent service on Windows');
         child_process.execSync('sc config ssh-agent start=demand', { stdio: 'inherit' });
+        
+        const home = process.env['HOMEDRIVE'] + process.env['HOMEPATH'];
+    } else {
+        const home = process.env['HOME'];
     }
+
+    const homeSsh = home + '/.ssh';
 
     console.log(`Adding GitHub.com keys to ${homeSsh}/known_hosts`);
     fs.mkdirSync(homeSsh, { recursive: true});
