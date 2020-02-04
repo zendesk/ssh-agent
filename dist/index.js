@@ -61,13 +61,18 @@ try {
 
     const home = process.env['HOME'];
     const homeSsh = home + '/.ssh';
-
+    const os = process.env['OS'];
     const privateKey = core.getInput('ssh-private-key').trim();
 
     if (!privateKey) {
         core.setFailed("The ssh-private-key argument is empty. Maybe the secret has not been configured, or you are using a wrong secret name in your workflow file.");
 
         return;
+    }
+
+    if (os == 'Windows_NT') {
+        console.log('Preparing ssh-agent service on Windows');
+        child_process.execSync('Set-Service ssh-agent -StartupType Manual', { stdio: 'inherit' });
     }
 
     console.log(`Adding GitHub.com keys to ${homeSsh}/known_hosts`);
