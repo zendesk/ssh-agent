@@ -60,6 +60,7 @@ const fs = __webpack_require__(747);
 try {
     const os = process.env['OS'];
     const privateKey = core.getInput('ssh-private-key').trim();
+    var home, homeSsh;
 
     if (!privateKey) {
         core.setFailed("The ssh-private-key argument is empty. Maybe the secret has not been configured, or you are using a wrong secret name in your workflow file.");
@@ -71,12 +72,12 @@ try {
         console.log('Preparing ssh-agent service on Windows');
         child_process.execSync('sc config ssh-agent start=demand', { stdio: 'inherit' });
         
-        const home = process.env['HOMEDRIVE'] + process.env['HOMEPATH'];
+        home = process.env['HOMEDRIVE'] + process.env['HOMEPATH'];
     } else {
-        const home = process.env['HOME'];
+        home = process.env['HOME'];
     }
 
-    const homeSsh = home + '/.ssh';
+    homeSsh = home + '/.ssh';
 
     console.log(`Adding GitHub.com keys to ${homeSsh}/known_hosts`);
     fs.mkdirSync(homeSsh, { recursive: true});
