@@ -72,7 +72,7 @@ try {
 
     if (os == 'Windows_NT') {
         console.log('Preparing ssh-agent service on Windows');
-        child_process.execSync('Set-Service ssh-agent -StartupType Manual', { stdio: 'inherit' });
+        child_process.execSync('sc config ssh-agent start=demand', { stdio: 'inherit' });
     }
 
     console.log(`Adding GitHub.com keys to ${homeSsh}/known_hosts`);
