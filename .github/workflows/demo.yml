@@ -7,6 +7,7 @@ jobs:
                 os: [ubuntu-latest, macOS-latest, windows-latest]
         runs-on: ${{ matrix.os }}
         steps:
+            - run: printenv 
             - uses: actions/checkout@v1
             - name: Setup key
               uses: ./
